@@ -77,6 +77,7 @@ export default function Home() {
   const time = useRef(0);
   const apply = useCallback((id: SceneId, auto = false) => {
     const next = scenes.find((s) => s.id === id)!;
+    setMode('model');
     setScene(id);
     setValues({ ...next.values });
     setManual(false);
@@ -121,6 +122,7 @@ export default function Home() {
     viewer.current?.reset();
   };
   const sensor = (kind: EventKind) => {
+    setMode('model');
     setPlaying(false);
     const result = simulateEvent(kind, values);
     setValues(result.values);
