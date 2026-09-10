@@ -1,9 +1,17 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
+import { createHash } from 'node:crypto';
 import { scenes, simulateEvent, views } from '../lib/home.ts';
 const model = fs.readFileSync(
   new URL('../public/assets/qingyu.glb', import.meta.url),
 );
+assert.equal(createHash('sha256').update(model).digest('hex'),
+  '0e400bd28fd5cc435e029e21eafb56fc711bdf09fc70d9ecf6dcc25a04f1ff54',
+  'GLB is incomplete or differs from the validated Blender export');
+assert.equal(createHash('sha256').update(fs.readFileSync(
+  new URL('../public/assets/model.json', import.meta.url))).digest('hex'),
+  'ace8e08c06fb80f280ffc2a21f06250cdff505f47335bad60047bda279c049f1',
+  'Model metadata is incomplete or mismatched');
 assert.equal(model.toString('ascii', 0, 4), 'glTF');
 assert.equal(model.readUInt32LE(4), 2);
 assert.equal(model.readUInt32LE(8), model.length);
@@ -104,6 +112,6 @@ const report = {
   eventChecks: 5,
   views: views.length,
   limitations:
-    'WebGL appearance is not pixel-identical to Cycles; native browser interaction was not automated.',
+    'Static checks do not replace browser visual and interaction verification.',
 };
 console.log(JSON.stringify(report, null, 2));

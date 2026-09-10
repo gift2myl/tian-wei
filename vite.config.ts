@@ -7,6 +7,5 @@ export default defineConfig({
   plugins: [react()],
   resolve: { alias: { '@': fileURLToPath(new URL('.', import.meta.url)) } },
   css: { postcss: { plugins: [tailwindcss()] } },
-  server: { host: '127.0.0.1', port: 4173 },
-  build: { chunkSizeWarningLimit: 1200 }
+  build: { outDir: 'dist', emptyOutDir: true, chunkSizeWarningLimit: 1200 },
 });
